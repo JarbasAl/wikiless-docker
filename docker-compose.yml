@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  wikiless:
+    image: wikiless:latest
+    networks:
+      wikiless_net:
+        ipv4_address: 172.21.0.6
+    environment:
+      REDIS_HOST: redis://172.21.0.5:6379
+    ports:
+      - "8180:8080"
+    depends_on:
+        - wikiless_redis
+
+  wikiless_redis:
+    image: "redis:alpine"
+    networks:
+      wikiless_net:
+        ipv4_address: 172.21.0.5
+    ports:
+      - "6379"
+
+networks:
+  wikiless_net:
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
